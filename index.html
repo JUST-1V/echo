@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echo</title>
+  <link rel="stylesheet" href="./files/slpash.css">
+  <link rel="stylesheet" href="./files/style.css" />
+  <script
+  src="https://kit.fontawesome.com/4b9b1b2686.js"
+  crossorigin="anonymous"
+></script>
+</head>
+<body>
+  <div class="createid" id="idmaker">
+    <div class="logo">
+      <img src="./assets/echologo.png" alt="" srcset="">
+    </div>
+    <div class="title-bar">
+      <div class="titler">
+        <h1>ECHO CHAT</h1>
+      </div>
+    </div>
+
+
+    <div id="form" autocomplete="off">
+
+
+      <input type="text" id="userId" name="userId" required autocomplete="off" placeholder="Enter Echo ID">
+      <span id="errorMsg" class="error">User ID must be at least 8 characters and include letters,
+        numbers, atleast 1 number , 1 capital alphabet and 1 small alphabet</span><br />
+      <button id="sbtn" onclick="getvalidation()">→</button>
+    </div>
+    <p id="status">This is a free communication tool that is designed for simplicity, privacy, and security. All
+      interaction between you and your online peers is encrypted. There is no record of your conversation once you all
+      leave.</p>
+  </div>
+
+ 
+
+
+  <div class="messenger-container" id="msgcontent">
+    <div class="logobar">
+      <img src="./assets/echologocrop.png" alt="" srcset="">
+    </div>
+
+    <div class="main-content">
+      <div class="sidebar">
+        <h3><i class="fa-solid fa-id-badge"></i></h3>
+        <ul id="peer-list"></ul>
+      </div>
+      <div class="chat-area">
+        <div class="user-info">
+          <input type="text" id="my-id" placeholder="Your ID" readonly />
+          <input type="text" id="peer-id" placeholder="Peer ID" />
+          <button id="connect-btn">
+            Connect</button>
+        </div>
+        <div class="chat-box" id="chat-box">
+          <!-- Messages will appear here -->
+        </div>
+        <div class="message-input">
+          <input type="text" id="message" placeholder="Type your message here..." />
+          <button id="send-btn"><i class="fa-regular fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.1/dist/peerjs.min.js"></script>
+  <script src="./files/script.js"></script>
+  <script>
+
+  </script>
+</body>
+
+</html>
