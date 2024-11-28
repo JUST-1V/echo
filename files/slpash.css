@@ -1,87 +1,102 @@
 .createid{
-    height: 100%;
-    background: #0e0e0e;
-    border: none;
-    color: white;
-    display: block;
-    transition: display 0.5s ease-in-out;
-    
+  height: 100%;
+  background: #0e0e0e;
+  border: none;
+  color: white;
+  display: block;
+  transition: display 0.5s ease-in-out;
+  
+}
+.titler h1{
+  font-size: 3em;
+  font-family: "Prosto One", sans-serif;
 }
 
+.createid h3 {
+  text-align: center;
+}
 
-  .createid h3 {
-    text-align: center;
-  }
-
-  .createid p {
-    text-transform: capitalize;
-    padding: 2em;
-    text-align: justify;
-    margin-top: 5em;
-  }
+.createid p {
+  text-transform: capitalize;
+  padding: 2em;
+  text-align: justify;
+  margin-top: 10em;
+}
+#callbtn{
+  font-size: 2em;
+  color: #656565;
+  background: #1e1d1d;
+  padding: 10px;
+  border: 1px solid #3b3b3b;
+  left: 5.3em;
+  bottom: 7em;
+  position: absolute;
+  outline: none;
+  border-radius: 31px;
+}
 
 .titler{
-    margin-top: 8em;
-    text-align: center;
+  margin-top: 1em;
+  text-align: center;
 }
 .title-bar-text h1{
- font-size: 3.8em;
- margin: 4px;
+font-size: 3.8em;
+margin: 4px;
 }
 .logo{
-    text-align: center;
+  text-align: center;
 }
 .logo img{
-   height: 6em;
+ height: 6em;
 }
 .signin{
-    font-weight: 100;
-    margin-top: 9em;
-    text-align: center;
+  font-weight: 100;
+  margin-top: 9em;
+  text-align: center;
 }
 .error {
-    color: red;
-    display: none;
+  color: red;
+  display: none;
 }
 
 #form{
-    padding-top: 35%;
+  padding-top: 35%;
 /* text-align: center; */
 display: flex;
 align-items: center;
 flex-direction: column;
 justify-content: center;
 gap: 1em;
-  }
-  #sbtn{
-    height: 60px;
-    background: teal;
-    outline: none;
-    border-radius: 50%;
-    font-size: 1.9em;
-    padding-bottom: 5px;
-    color: white;
-    border: 1px solid #2c2c2c;
-    width: 60px;
-  }
+}
+#sbtn{
+  height: 60px;
+  background: teal;
+  outline: none;
+  border-radius: 50%;
+  font-size: 1.9em;
+  padding-bottom: 5px;
+  color: white;
+  border: 1px solid #2c2c2c;
+  width: 60px;
+}
 #userId{
-    padding: 6px;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid teal;
-    background: #0e0e0e;
-    color: white;
-    font-size: 20px;
+  padding: 6px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid teal;
+  background: #0e0e0e;
+  color: white;
+  font-size: 20px;
 }
 
 #errorMsg{
-   
-    background: #212121;
-    border-radius: 6px;
-    width: 312px;
-    z-index: 99;
-    padding: 0.4em;
-    border: 1px solid #5c5c5c;
-    position: absolute;
-    bottom: 11em;
+ 
+  background: #212121;
+  border-radius: 6px;
+  width: 312px;
+  z-index: 99;
+  padding: 0.4em;
+  border: 1px solid #5c5c5c;
+  position: absolute;
+  bottom: 11em;
 }
