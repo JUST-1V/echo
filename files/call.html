@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Connect</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
+   <script
+  src="https://kit.fontawesome.com/4b9b1b2686.js"
+  crossorigin="anonymous"
+></script>
+    
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1f1f1f, #000000);
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+          
+           
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            
+            color: white;
+            width: 350px;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2rem;
+            color: Teal;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #b3b3b3;
+        }
+
+        input, button {
+            padding: 0.7rem;
+            font-size: 1rem;
+            border-radius: 30px;
+            border: none;
+            margin: 0.5rem 0;
+            outline: none;
+            width: 80%;
+            box-sizing: border-box;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #9c27b0;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #6a0080;
+        }
+
+        #call-button {
+            background-color: teal;
+        }
+
+        #end-call-button {
+            background-color: red;
+        }
+
+        #participants {
+            margin-top: 1rem;
+        }
+
+        .participant {
+            margin: 0.5rem 0;
+        }
+
+        audio {
+            display: block;
+            margin: 0 auto 1rem;
+        }
+
+        #debug {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #d1c4e9;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Glassmorphic Icon Button Styling */
+        .icon-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 0.7rem;
+            margin: 0.5rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .icon-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-button svg {
+            width: 24px;
+            height: 24px;
+        }
+        .container h4{
+            text-align: end;
+    color: red;
+    background: teal;
+    display: inline;
+    height: 2em;
+    /* padding: 11px; */
+    display: flex
+;
+    width: 2em;
+    position: absolute;
+    z-index: 99;
+    border-radius: 10px;
+    top: 12em;
+    left: 19em;
+    align-items: center;
+    justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="../index.html"><h4><i class="fa-solid fa-x"></i></h4></a>
+        <h1>ECHO CONNECT</h1>
+        <p>Your ID: <span id="peer-id"></span></p>
+
+        <input type="text" id="remote-peer-id" placeholder="Enter Peer ID" />
+
+        <div class="icon-button" id="call-button">
+            <!-- Call Icon -->
+            <i class="fa-solid fa-phone"></i>
+            </svg>
+        </div>
+
+        <div class="icon-button" id="end-call-button" disabled>
+            <!-- End Call Icon -->
+            <i class="fa-solid fa-x"></i>
+        </div>
+
+        <p id="call-status"></p>
+
+        <div id="participants"></div>
+
+        <div id="debug"></div>
+    </div>
+
+    <script>
+      
+        function gfg() {
+            let minm = 100000;
+            let maxm = 999999;
+           let iden = Math.floor(Math
+                .random() * (maxm - minm + 1)) + minm;
+          return iden;
+        }
+     let iden = gfg();
+        const peer = new Peer(iden);
+        let localStream;
+        let connections = new Map();
+        let inCall = false;
+
+        function log(message) {
+            console.log(message);
+            const debugElement = document.getElementById('debug');
+            debugElement.innerHTML += message + '<br>';
+            debugElement.scrollTop = debugElement.scrollHeight;
+        }
+
+        peer.on('open', (id) => {
+            document.getElementById('peer-id').textContent = id;
+            log('Your Peer ID: ' + id);
+        });
+
+        document.getElementById('call-button').addEventListener('click', () => {
+            const remotePeerId = document.getElementById('remote-peer-id').value;
+            startCall(remotePeerId);
+        });
+
+        document.getElementById('end-call-button').addEventListener('click', () => {
+            endCall();
+        });
+
+        peer.on('call', (call) => {
+            log('Incoming call from: ' + call.peer);
+            answerCall(call);
+        });
+
+        function startCall(remotePeerId) {
+            if (!inCall) {
+                navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                    .then((stream) => {
+                        localStream = stream;
+                        inCall = true;
+                        updateUIForCall();
+                        connectToPeer(remotePeerId, stream);
+                    })
+                    .catch((err) => {
+                        log('Failed to get local stream: ' + err.message);
+                    });
+            } else {
+                connectToPeer(remotePeerId, localStream);
+            }
+        }
+
+        function connectToPeer(remotePeerId, stream) {
+            log('Connecting to peer: ' + remotePeerId);
+            const call = peer.call(remotePeerId, stream);
+            handleCall(call);
+        }
+
+        function answerCall(call) {
+            if (!inCall) {
+                navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                    .then((stream) => {
+                        localStream = stream;
+                        inCall = true;
+                        updateUIForCall();
+                        call.answer(stream);
+                        handleCall(call);
+                    })
+                    .catch((err) => {
+                        log('Failed to get local stream: ' + err.message);
+                    });
+            } else {
+                call.answer(localStream);
+                handleCall(call);
+            }
+        }
+
+       function handleCall(call) {
+        call.on('stream', (remoteStream) => {
+            log('Received stream from: ' + call.peer);
+            addParticipant(call.peer, remoteStream);
+        });
+
+        call.on('close', () => {
+            log('Call closed with: ' + call.peer);
+            removeParticipant(call.peer);
+        });
+
+        call.on('error', (err) => {
+            log('Call error with ' + call.peer + ': ' + err.message);
+            removeParticipant(call.peer);
+        });
+
+        connections.set(call.peer, call);
+    }
+
+    function addParticipant(peerId, stream) {
+        const participantsDiv = document.getElementById('participants');
+        const participantDiv = document.createElement('div');
+        participantDiv.className = 'participant';
+        participantDiv.id = 'participant-' + peerId;
+
+        const audio = document.createElement('audio');
+        audio.autoplay = true;
+        audio.srcObject = stream;
+
+        const label = document.createElement('span');
+        label.textContent = 'Participant: ' + peerId;
+
+        participantDiv.appendChild(audio);
+        participantDiv.appendChild(label);
+        participantsDiv.appendChild(participantDiv);
+    }
+
+    function removeParticipant(peerId) {
+        const participantDiv = document.getElementById('participant-' + peerId);
+        if (participantDiv) {
+            participantDiv.remove();
+        }
+        connections.delete(peerId);
+        if (connections.size === 0) {
+            endCall();
+        }
+    }
+
+    function updateUIForCall() {
+        document.getElementById('call-button').textContent = 'Add Participant';
+        document.getElementById('end-call-button').disabled = false;
+        updateCallStatus('In Call');
+    }
+
+    function endCall() {
+        inCall = false;
+        connections.forEach((call) => {
+            call.close();
+        });
+        connections.clear();
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+            localStream = null;
+        }
+        document.getElementById('participants').innerHTML = '';
+        document.getElementById('call-button').textContent = 'Call';
+        document.getElementById('end-call-button').disabled = true;
+        updateCallStatus('Call Ended');
+    }
+
+    function updateCallStatus(status) {
+        document.getElementById('call-status').textContent = status;
+        log('Call status: ' + status);
+    }
+    </script>
+</body>
+</html>
